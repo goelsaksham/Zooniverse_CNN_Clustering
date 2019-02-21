@@ -310,7 +310,7 @@ class Xception_DEC(object):
         for encoder_layers in self.encoder.layers:
             x = encoder_layers(x)
         # Now x is the output of the Xception + Encoder model at the end
-        self.xception_autoencoder_model = Model(inputs=self.base_xception_model.input, outputs=x)
+        self.xception_encoder_model = Model(inputs=self.base_xception_model.input, outputs=x)
         # Using another variable
         y = x
 
@@ -329,10 +329,15 @@ class Xception_DEC(object):
 
     def pretrain(self, x, y=None, optimizer='adam', epochs=200, batch_size=256, save_dir='results/temp'):
         print('...Pretraining...')
+        # Compiling the autoencoder model
         self.autoencoder.compile(optimizer=optimizer, loss='mse')
 
+        # Making a logger for the training process
         csv_logger = callbacks.CSVLogger(save_dir + '/pretrain_log.csv')
         cb = [csv_logger]
+
+        # Printing accuraccy metrics for the target class using clustering over the features learned from the
+        # autoencoder
         if y is not None:
             class PrintACC(callbacks.Callback):
                 def __init__(self, x, y):
@@ -343,22 +348,33 @@ class Xception_DEC(object):
                 def on_epoch_end(self, epoch, logs=None):
                     if int(epochs/10) != 0 and epoch % int(epochs/10) != 0:
                         return
-                    feature_model = Model(self.model.input,
-                                          self.model.get_layer(
-                                              'encoder_%d' % (int(len(self.model.layers) / 2) - 1)).output)
+                    # Constructing the feature extractor model
+                    num_layers = int(len(self.model.layers))
+                    feature_model = Model(self.model.layers[0].get_input_at(0),
+                                          self.model.layers[int(num_layers/2)].get_output_at(0))
+                                          #self.model.layers[int(len(self.model.layers))/2 - 1)].get_output_at(0))
+                                          #self.model.get_layer(
+                                          #    'encoder_%d' % (int(len(self.model.layers) / 2) - 1)).output)
+                                          #self.model.get_output_at(int(len(self.model.layers)) - 1))
+                    # Extracting the features found by the encoder from the given input data
                     features = feature_model.predict(self.x)
+                    # Defining a KMeans model to run on top of the features extracted from each training data point
                     km = KMeans(n_clusters=len(np.unique(self.y)), n_init=20, n_jobs=4)
+                    # get the predictions of the Kmeans model
                     y_pred = km.fit_predict(features)
-                    # print()
+                    # print the accuracy of the cluster assignments. The accuracy method is defined using the linear
+                    # assignment method
                     print(' '*8 + '|==>  acc: %.4f,  nmi: %.4f  <==|'
                           % (metrics.acc(self.y, y_pred), metrics.nmi(self.y, y_pred)))
-
+            # Adding the printing callback to all the callbacks
             cb.append(PrintACC(x, y))
 
         # begin pretraining
         t0 = time()
+        # We are minimizing the reconstruction loss.
         self.autoencoder.fit(x, x, batch_size=batch_size, epochs=epochs, callbacks=cb)
         print('Pretraining time: %ds' % round(time() - t0))
+        # Saving the weights
         self.autoencoder.save_weights(save_dir + '/ae_weights.h5')
         print('Pretrained weights are saved to %s/ae_weights.h5' % save_dir)
         self.pretrained = True
@@ -455,6 +471,7 @@ class Xception_DEC(object):
 
 if __name__ == "__main__":
     # setting the hyper parameters
+    """
     import argparse
 
     parser = argparse.ArgumentParser(description='train',
@@ -473,15 +490,17 @@ if __name__ == "__main__":
     import os
     if not os.path.exists(args.save_dir):
         os.makedirs(args.save_dir)
+    """
 
     # load dataset
     from DEC.datasets import load_data
-    x, y = load_data(args.dataset)
+    x, y = load_data('mnist')
     n_clusters = len(np.unique(y))
 
     init = 'glorot_uniform'
     pretrain_optimizer = 'adam'
     # setting parameters
+    """
     if args.dataset == 'mnist' or args.dataset == 'fmnist':
         update_interval = 140
         pretrain_epochs = 300
@@ -500,15 +519,19 @@ if __name__ == "__main__":
     elif args.dataset == 'stl':
         update_interval = 30
         pretrain_epochs = 10
-
+    """
+    """
     if args.update_interval is not None:
         update_interval = args.update_interval
     if args.pretrain_epochs is not None:
         pretrain_epochs = args.pretrain_epochs
-
+    """
     # prepare the DEC model
-    dec = DEC(dims=[x.shape[-1], 500, 500, 2000, 10], n_clusters=n_clusters, init=init)
+    dec = Xception_DEC(image_input_shape=(128, 128, 3), dims=[x.shape[-1], 512, 512, 256, 10],
+                       n_clusters=n_clusters, init=init)
+    dec.pretrain(x, y, epochs=2)
 
+    """
     if args.ae_weights is None:
         dec.pretrain(x=x, y=y, optimizer=pretrain_optimizer,
                      epochs=pretrain_epochs, batch_size=args.batch_size,
@@ -523,3 +546,4 @@ if __name__ == "__main__":
                      update_interval=update_interval, save_dir=args.save_dir)
     print('acc:', metrics.acc(y, y_pred))
     print('clustering time: ', (time() - t0))
+    """
