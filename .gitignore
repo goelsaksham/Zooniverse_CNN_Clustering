@@ -119,6 +119,10 @@ dmypy.json
 # Data Folder
 data/
 
+
+# Model files
+*.h5
+
 # Pycharm
 .idea/
 *.xml
