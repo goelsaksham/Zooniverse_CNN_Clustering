@@ -121,7 +121,7 @@ data/
 
 
 # Model files
-*.h5
+#*.h5
 
 # Pycharm
 .idea/
