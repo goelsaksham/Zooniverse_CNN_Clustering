@@ -116,17 +116,21 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
-# Data Folder
-data/galaxy_zoo/
-data/xception_clustering/
-
-
-# Model files
-#*.h5
-
 # Pycharm
 .idea/
 *.xml
 *.iml
 .xml
 .iml
+
+# Data Folder
+data/galaxy_zoo/
+data/xception_clustering/
+data/temp_xception_clustering/
+
+# Model files
+*.h5
+
+# Keys
+*.pem
+*.ppk
