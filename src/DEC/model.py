@@ -42,6 +42,8 @@ def autoencoder(dims, act='relu', init='glorot_uniform'):
     # internal layers in encoder
     for i in range(n_stacks-1):
         h = Dense(dims[i + 1], activation=act, kernel_initializer=init, name='encoder_%d' % i)(h)
+        # TODO: Add a Dropout layer
+
 
     # hidden layer
     h = Dense(dims[-1], kernel_initializer=init, name='encoder_%d' % (n_stacks - 1))(h)  # hidden layer, features are extracted from here
