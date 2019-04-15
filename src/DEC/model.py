@@ -358,7 +358,7 @@ class DEC_Agglomerative(object):
         y_pred = aggclusterer.fit_predict(self.encoder.predict(x))
         y_pred_last = np.copy(y_pred)
         cluster_centers = np.array([np.mean(x[y_pred == 0], axis=0), np.mean(x[y_pred == 1], axis=0)])
-        self.model.get_layer(name='clustering').set_weights([aggclusterer.cluster_centers_])
+        self.model.get_layer(name='clustering').set_weights([cluster_centers])
 
         # Step 2: deep clustering
         # logging file
