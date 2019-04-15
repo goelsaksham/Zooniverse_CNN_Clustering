@@ -276,7 +276,7 @@ class DEC_Agglomerative(object):
                  alpha=1.0,
                  init='glorot_uniform'):
 
-        super(DEC, self).__init__()
+        super(DEC_Agglomerative, self).__init__()
 
         self.dims = dims
         self.input_dim = dims[0]
