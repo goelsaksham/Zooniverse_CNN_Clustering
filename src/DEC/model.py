@@ -196,7 +196,7 @@ class DEC(object):
         self.model.compile(optimizer=optimizer, loss=loss)
 
     def fit(self, x, y=None, maxiter=2e4, batch_size=256, tol=1e-3,
-            update_interval=140, kmeans_init=20, save_dir='./results/temp'):
+            update_interval=140, kmeans_init='k-means++', save_dir='./results/temp'):
 
         print('Update interval', update_interval)
         save_interval = int(x.shape[0] / batch_size) * 5  # 5 epochs
