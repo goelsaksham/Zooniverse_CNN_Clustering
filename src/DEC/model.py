@@ -345,7 +345,7 @@ class DEC_Agglomerative(object):
         self.model.compile(optimizer=optimizer, loss=loss)
 
     def fit(self, x, y=None, maxiter=2e4, batch_size=256, tol=1e-3,
-            update_interval=140, kmeans_init='k-means++', save_dir='./results/temp'):
+            update_interval=140, cluster_linkage='single', save_dir='./results/temp'):
 
         print('Update interval', update_interval)
         save_interval = int(x.shape[0] / batch_size) * 5  # 5 epochs
@@ -354,7 +354,7 @@ class DEC_Agglomerative(object):
         # Step 1: initialize cluster centers using k-means
         t1 = time()
         print('Initializing cluster centers with k-means.')
-        aggclusterer = AgglomerativeClustering(n_clusters=self.n_clusters)
+        aggclusterer = AgglomerativeClustering(n_clusters=self.n_clusters, linkage=cluster_linkage)
         y_pred = aggclusterer.fit_predict(self.encoder.predict(x))
         y_pred_last = np.copy(y_pred)
         self.model.get_layer(name='clustering').set_weights([aggclusterer.cluster_centers_])
