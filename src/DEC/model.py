@@ -355,9 +355,10 @@ class DEC_Agglomerative(object):
         t1 = time()
         print('Initializing cluster centers with k-means.')
         aggclusterer = AgglomerativeClustering(n_clusters=self.n_clusters, linkage=cluster_linkage)
-        y_pred = aggclusterer.fit_predict(self.encoder.predict(x))
+        predicted_stuff = self.encoder.predict(x)
+        y_pred = aggclusterer.fit_predict(predicted_stuff)
         y_pred_last = np.copy(y_pred)
-        cluster_centers = np.array([np.mean(x[y_pred == 0], axis=0), np.mean(x[y_pred == 1], axis=0)])
+        cluster_centers = np.array([np.mean(predicted_stuff[y_pred == 0], axis=0), np.mean(predicted_stuff[y_pred == 1], axis=0)])
         self.model.get_layer(name='clustering').set_weights([cluster_centers])
 
         # Step 2: deep clustering
