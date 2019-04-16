@@ -306,15 +306,18 @@ class DEC_Agglomerative(object):
                 def on_epoch_end(self, epoch, logs=None):
                     if int(epochs/10) != 0 and epoch % int(epochs/10) != 0:
                         return
-                    feature_model = Model(self.model.input,
-                                          self.model.get_layer(
-                                              'encoder_%d' % (int(len(self.model.layers) / 2) - 1)).output)
-                    features = feature_model.predict(self.x)
-                    ac = AgglomerativeClustering(n_clusters=len(np.unique(self.y)))
-                    y_pred = ac.fit_predict(features)
-                    # print()
-                    print(' '*8 + '|==>  acc: %.4f,  nmi: %.4f  <==|'
-                          % (metrics.acc(self.y, y_pred), metrics.nmi(self.y, y_pred)))
+                    if epoch % 40 == 0 or epoch == epochs:
+                        feature_model = Model(self.model.input,
+                                              self.model.get_layer(
+                                                  'encoder_%d' % (int(len(self.model.layers) / 2) - 1)).output)
+                        features = feature_model.predict(self.x)
+                        ac = AgglomerativeClustering(n_clusters=len(np.unique(self.y)))
+                        y_pred = ac.fit_predict(features)
+                        # print()
+                        print(' '*8 + '|==>  acc: %.4f,  nmi: %.4f  <==|'
+                              % (metrics.acc(self.y, y_pred), metrics.nmi(self.y, y_pred)))
+                    else:
+                        return 
 
             cb.append(PrintACC(x, y))
 
