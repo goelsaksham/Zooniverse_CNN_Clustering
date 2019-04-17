@@ -1,0 +1,5 @@
+Agglomerative Clustering,Clustering Accuracy,Clustering NMI,Clustering Loss,Reconstruction Loss
+Single,0.51854,0.00106,0.02849,0.00477464
+Complete,0.56533,0.01304,0.00922,0.004787
+Average,0.54748,0.00568,0.01357,0.00473432
+Ward,0.56272,0.01131,0.01571,0.0047878

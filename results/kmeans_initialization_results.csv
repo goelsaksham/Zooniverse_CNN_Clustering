@@ -1,0 +1,3 @@
+K-Means Initialization,Clustering Accuracy,Clustering NMI,Clustering Loss,Reconstruction Loss
+Sample Average,0.68988,0.11083,0.01688,0.004769
+Sample Top,0.6938,0.10931,0.00685,0.0048132

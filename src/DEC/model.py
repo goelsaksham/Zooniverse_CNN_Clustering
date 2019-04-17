@@ -317,7 +317,7 @@ class DEC_Agglomerative(object):
                         print(' '*8 + '|==>  acc: %.4f,  nmi: %.4f  <==|'
                               % (metrics.acc(self.y, y_pred), metrics.nmi(self.y, y_pred)))
                     else:
-                        return 
+                        return
 
             cb.append(PrintACC(x, y))
 
