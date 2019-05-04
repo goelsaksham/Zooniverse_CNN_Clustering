@@ -340,7 +340,7 @@ class DEC_Supervised(object):
     def supervised_learning(self, x, y=None, optimizer='adam', epochs=100, batch_size=32, save_dir='results/temp'):
         print('Learning Supervised')
         self.supervised_model.compile(optimizer, 'binary_crossentropy' if self.n_clusters == 2 else
-        'categorical_crossentropy')
+        'categorical_crossentropy', metrics=['accuracy'])
         csv_logger = callbacks.CSVLogger(save_dir + '/supervised_learning_log.csv')
         cb = [csv_logger]
 
