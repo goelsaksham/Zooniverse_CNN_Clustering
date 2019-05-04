@@ -14,19 +14,17 @@ from time import time
 import numpy as np
 import keras.backend as K
 from keras.engine.topology import Layer, InputSpec
-from keras.layers import Dense, Input
+from keras.layers import Dense, Input, Dropout
 from keras.models import Model
 from keras.optimizers import SGD
 from keras import callbacks
-from keras.initializers import VarianceScaling
 from sklearn.cluster import KMeans
 from DEC import metrics
 from keras.applications.xception import Xception
-from sklearn.cluster import SpectralClustering
 from sklearn.cluster import AgglomerativeClustering
 
 
-def autoencoder(dims, act='relu', init='glorot_uniform'):
+def autoencoder(dims, act='relu', init='glorot_uniform', drop=False):
     """
     Fully connected auto-encoder model, symmetric.
     Arguments:
@@ -43,20 +41,28 @@ def autoencoder(dims, act='relu', init='glorot_uniform'):
 
     # internal layers in encoder
     for i in range(n_stacks-1):
+        if drop:
+            h = Dropout(0.25)(h)
         h = Dense(dims[i + 1], activation=act, kernel_initializer=init, name='encoder_%d' % i)(h)
         # TODO: Add a Dropout layer
 
 
     # hidden layer
+    if drop:
+        h = Dropout(0.25)(h)
     h = Dense(dims[-1], kernel_initializer=init, name='encoder_%d' % (n_stacks - 1))(h)  # hidden layer, features are extracted from here
 
     y = h
     # internal layers in decoder
     for i in range(n_stacks-1, 0, -1):
         y = Dense(dims[i], activation=act, kernel_initializer=init, name='decoder_%d' % i)(y)
+        if drop:
+            y = Dropout(0.25)(y)
 
     # output
     y = Dense(dims[0], kernel_initializer=init, name='decoder_0')(y)
+    if drop:
+        y = Dropout(0.25)(y)
 
     return Model(inputs=x, outputs=y, name='AE'), Model(inputs=x, outputs=h, name='encoder')
 
@@ -127,7 +133,7 @@ class DEC(object):
                  dims,
                  n_clusters=10,
                  alpha=1.0,
-                 init='glorot_uniform'):
+                 init='glorot_uniform', drop=False):
 
         super(DEC, self).__init__()
 
@@ -137,7 +143,7 @@ class DEC(object):
 
         self.n_clusters = n_clusters
         self.alpha = alpha
-        self.autoencoder, self.encoder = autoencoder(self.dims, init=init)
+        self.autoencoder, self.encoder = autoencoder(self.dims, init=init, drop=drop)
 
         # prepare DEC model
         clustering_layer = ClusteringLayer(self.n_clusters, name='clustering')(self.encoder.output)
@@ -175,7 +181,7 @@ class DEC(object):
         t0 = time()
         self.autoencoder.fit(x, x, batch_size=batch_size, epochs=epochs, callbacks=cb)
         print('Pretraining time: %ds' % round(time() - t0))
-        self.autoencoder.save_weights(save_dir + '/ae_weights.h5')
+        # self.autoencoder.save_weights(save_dir + '/ae_weights.h5')
         print('Pretrained weights are saved to %s/ae_weights.h5' % save_dir)
         self.pretrained = True
 
@@ -257,14 +263,14 @@ class DEC(object):
             # save intermediate model
             if ite % save_interval == 0:
                 print('saving model to:', save_dir + '/DEC_model_' + str(ite) + '.h5')
-                self.model.save_weights(save_dir + '/DEC_model_' + str(ite) + '.h5')
+                # self.model.save_weights(save_dir + '/DEC_model_' + str(ite) + '.h5')
 
             ite += 1
 
         # save the trained model
         logfile.close()
         print('saving model to:', save_dir + '/DEC_model_final.h5')
-        self.model.save_weights(save_dir + '/DEC_model_final.h5')
+        # self.model.save_weights(save_dir + '/DEC_model_final.h5')
 
         return y_pred
 
@@ -274,7 +280,7 @@ class DEC_Supervised(object):
                  dims,
                  n_clusters=10,
                  alpha=1.0,
-                 init='glorot_uniform'):
+                 init='glorot_uniform', drop=False):
 
         super(DEC_Supervised, self).__init__()
 
@@ -284,7 +290,7 @@ class DEC_Supervised(object):
 
         self.n_clusters = n_clusters
         self.alpha = alpha
-        self.autoencoder, self.encoder = autoencoder(self.dims, init=init)
+        self.autoencoder, self.encoder = autoencoder(self.dims, init=init, drop=drop)
 
         supervised_layer = Dense(1 if self.n_clusters == 2 else self.n_clusters,
                                  activation='sigmoid' if self.n_clusters == 2 else 'softmax')(self.encoder.output)
@@ -326,7 +332,7 @@ class DEC_Supervised(object):
         t0 = time()
         self.autoencoder.fit(x, x, batch_size=batch_size, epochs=epochs, callbacks=cb)
         print('Pretraining time: %ds' % round(time() - t0))
-        self.autoencoder.save_weights(save_dir + '/ae_weights.h5')
+        # self.autoencoder.save_weights(save_dir + '/ae_weights.h5')
         print('Pretrained weights are saved to %s/ae_weights.h5' % save_dir)
         self.pretrained = True
 
@@ -342,7 +348,7 @@ class DEC_Supervised(object):
         t0 = time()
         self.supervised_model.fit(x, y, batch_size=batch_size, epochs=epochs, callbacks=cb)
         print('Supervised Learning time: %ds' % round(time() - t0))
-        self.supervised_model.save_weights(save_dir + '/sl_weights.h5')
+        # self.supervised_model.save_weights(save_dir + '/sl_weights.h5')
         print('Supervised Learning weights are saved to %s/sl_weights.h5' % save_dir)
         self.supervised_learning_done = True
 
@@ -425,14 +431,14 @@ class DEC_Supervised(object):
             # save intermediate model
             if ite % save_interval == 0:
                 print('saving model to:', save_dir + '/DEC_model_' + str(ite) + '.h5')
-                self.model.save_weights(save_dir + '/DEC_model_' + str(ite) + '.h5')
+                # self.model.save_weights(save_dir + '/DEC_model_' + str(ite) + '.h5')
 
             ite += 1
 
         # save the trained model
         logfile.close()
         print('saving model to:', save_dir + '/DEC_model_final.h5')
-        self.model.save_weights(save_dir + '/DEC_model_final.h5')
+        # self.model.save_weights(save_dir + '/DEC_model_final.h5')
 
         return y_pred
 
@@ -493,7 +499,7 @@ class DEC_Agglomerative(object):
         t0 = time()
         self.autoencoder.fit(x, x, batch_size=batch_size, epochs=epochs, callbacks=cb)
         print('Pretraining time: %ds' % round(time() - t0))
-        self.autoencoder.save_weights(save_dir + '/ae_weights.h5')
+        # self.autoencoder.save_weights(save_dir + '/ae_weights.h5')
         print('Pretrained weights are saved to %s/ae_weights.h5' % save_dir)
         self.pretrained = True
 
@@ -577,14 +583,14 @@ class DEC_Agglomerative(object):
             # save intermediate model
             if ite % save_interval == 0:
                 print('saving model to:', save_dir + '/DEC_model_' + str(ite) + '.h5')
-                self.model.save_weights(save_dir + '/DEC_model_' + str(ite) + '.h5')
+                # self.model.save_weights(save_dir + '/DEC_model_' + str(ite) + '.h5')
 
             ite += 1
 
         # save the trained model
         logfile.close()
         print('saving model to:', save_dir + '/DEC_model_final.h5')
-        self.model.save_weights(save_dir + '/DEC_model_final.h5')
+        # self.model.save_weights(save_dir + '/DEC_model_final.h5')
 
         return y_pred
 
@@ -699,7 +705,7 @@ class Xception_DEC(object):
         self.autoencoder.fit(x, x, batch_size=batch_size, epochs=epochs, callbacks=cb)
         print('Pretraining time: %ds' % round(time() - t0))
         # Saving the weights
-        self.autoencoder.save_weights(save_dir + '/ae_weights.h5')
+        # self.autoencoder.save_weights(save_dir + '/ae_weights.h5')
         print('Pretrained weights are saved to %s/ae_weights.h5' % save_dir)
         self.pretrained = True
 
@@ -781,14 +787,14 @@ class Xception_DEC(object):
             # save intermediate model
             if ite % save_interval == 0:
                 print('saving model to:', save_dir + '/DEC_model_' + str(ite) + '.h5')
-                self.model.save_weights(save_dir + '/DEC_model_' + str(ite) + '.h5')
+                # self.model.save_weights(save_dir + '/DEC_model_' + str(ite) + '.h5')
 
             ite += 1
 
         # save the trained model
         logfile.close()
         print('saving model to:', save_dir + '/DEC_model_final.h5')
-        self.model.save_weights(save_dir + '/DEC_model_final.h5')
+        # self.model.save_weights(save_dir + '/DEC_model_final.h5')
 
         return y_pred
 
