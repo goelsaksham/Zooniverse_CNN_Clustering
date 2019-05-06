@@ -1,4 +1,5 @@
-@article{10.1111/j.1365-2966.2009.15366.x,
+% WND-CHARM a way of extracting features from the galaxy imagees resulting in a 1025-D feature vector
+@article{WND-CHARM,
     author = {Shamir, Lior},
     title = "{Automatic morphological classification of galaxy images}",
     journal = {Monthly Notices of the Royal Astronomical Society},
@@ -12,4 +13,254 @@
     doi = {10.1111/j.1365-2966.2009.15366.x},
     url = {https://doi.org/10.1111/j.1365-2966.2009.15366.x},
     eprint = {http://oup.prod.sis.lan/mnras/article-pdf/399/3/1367/18693417/mnras0399-1367.pdf},
+}
+
+
+% Original ANN using 13 learned features
+@article{13_features,
+  title={Morphological classification of galaxies by artificial neural networks},
+  author={Storrie-Lombardi, MC and Lahav, O and Sodre Jr, L and Storrie-Lombardi, LJ},
+  journal={Monthly Notices of the Royal Astronomical Society},
+  volume={259},
+  number={1},
+  pages={8P--12P},
+  year={1992},
+  publisher={Oxford University Press Oxford, UK}
+}
+
+
+% Using Decision Trees on features learned in another research paper
+@article{dt,
+    author = {Owens, E. A. and Griffiths, R. E. and Ratnatunga, K. U.},
+    title = "{Using oblique decision trees for the morphological classification of galaxies}",
+    journal = {Monthly Notices of the Royal Astronomical Society},
+    volume = {281},
+    number = {1},
+    pages = {153-157},
+    year = {1996},
+    month = {07},
+    abstract = "{We discuss the application of a class of machine learning algorithms known as decision trees to the process of galactic classification. In particular, we explore the application of oblique decision trees induced with different impurity measures to the problem of classifying galactic morphology data provided by Storrie-Lombardi et al. Our results are compared with those obtained by a neural network classifier created by Storrie-Lombardi et al., and we show that the two methodologies are comparable. We conclude with a demonstration that the original data can be easily classified into less well-defined categories.}",
+    issn = {0035-8711},
+    doi = {10.1093/mnras/281.1.153},
+    url = {https://doi.org/10.1093/mnras/281.1.153},
+    eprint = {http://oup.prod.sis.lan/mnras/article-pdf/281/1/153/18539987/281-1-153.pdf},
+}
+
+
+% Using neural network on different set of features using PCA and locally weighted regression
+@article{nn_pca_lwr,
+    author = {De La Calleja, Jorge and Fuentes, Olac},
+    title = "{Machine learning and image analysis for morphological galaxy classification}",
+    journal = {Monthly Notices of the Royal Astronomical Society},
+    volume = {349},
+    number = {1},
+    pages = {87-93},
+    year = {2004},
+    month = {03},
+    abstract = "{In this paper we present an experimental study of machine learning and image analysis for performing automated morphological galaxy classification. We used a neural network, and a locally weighted regression method, and implemented homogeneous ensembles of classifiers. The ensemble of neural networks was created using the bagging ensemble method, and manipulation of input features was used to create the ensemble of locally weighed regression. The galaxies used were rotated, centred, and cropped, all in a fully automatic manner. In addition, we used principal component analysis to reduce the dimensionality of the data, and to extract relevant information in the images. Preliminary experimental results using 10-fold cross-validation show that the homogeneous ensemble of locally weighted regression produces the best results, with over 91 per cent accuracy when considering three galaxy types (E, S and Irr), and over 95 per cent accuracy for two types (E and S).}",
+    issn = {0035-8711},
+    doi = {10.1111/j.1365-2966.2004.07442.x},
+    url = {https://doi.org/10.1111/j.1365-2966.2004.07442.x},
+    eprint = {http://oup.prod.sis.lan/mnras/article-pdf/349/1/87/11183170/349-1-87.pdf},
+}
+
+% Using neural network over learned features using PCA
+@article{nn_pca,
+    author = {Naim, A. and Lahav, O. and SodrĂ©, L., Jr. and Storrie-Lombardi, M. C.},
+    title = "{Automated morphological classification of APM galaxies by supervised artificial neural networks}",
+    journal = {Monthly Notices of the Royal Astronomical Society},
+    volume = {275},
+    number = {3},
+    pages = {567-590},
+    year = {1995},
+    month = {08},
+    abstract = "{We train artificial neural networks to classify galaxies based solely on the morphology of the galaxy images as they appear on blue survey plates. The images are reduced and morphological features such as bulge size and the number of arms are extracted, all in a fully automated manner. The galaxy sample was first classified by six independent experts. We use several definitions for the mean type of each galaxy, based on those classifications. We then train and test the network on these features. We find that the rms error of the network classifications, as compared with the mean types of the expert classifications, is 1.8 Revised Hubble Types. This is comparable to the overall rms dispersion between the experts. This result is robust and almost completely independent of the network architecture used.}",
+    issn = {0035-8711},
+    doi = {10.1093/mnras/275.3.567},
+    url = {https://doi.org/10.1093/mnras/275.3.567},
+    eprint = {http://oup.prod.sis.lan/mnras/article-pdf/275/3/567/2804452/mnras275-0567.pdf},
+}
+
+
+% Ensemble methods based on Neural Network, Decision Trees and a Naive Bayes Classifier
+@article{ensembles,
+  title={Ensembles of classifiers for morphological galaxy classification},
+  author={Bazell, D and Aha, David W},
+  journal={The Astrophysical Journal},
+  volume={548},
+  number={1},
+  pages={219},
+  year={2001},
+  publisher={IOP Publishing}
+}
+
+
+% Using Gini Coefficient as features
+@article{gini,
+  title={A new approach to galaxy morphology. I. Analysis of the Sloan Digital Sky Survey early data release},
+  author={Abraham, Roberto G and Van Den Bergh, Sidney and Nair, Preethi},
+  journal={The Astrophysical Journal},
+  volume={588},
+  number={1},
+  pages={218},
+  year={2003},
+  publisher={IOP Publishing}
+}
+
+
+% Using optical spectrum of a galaxy in an ann
+@article{optical_spectrum,
+  title={Correlating galaxy morphologies and spectra in the 2dF Galaxy Redshift Survey},
+  author={Madgwick, Darren S},
+  journal={Monthly Notices of the Royal Astronomical Society},
+  volume={338},
+  number={1},
+  pages={197--207},
+  year={2003},
+  publisher={Blackwell Science Ltd Oxford, UK}
+}
+
+% Fourier Components and PCA 
+@article{fourier_pca,
+  title={Automated galaxy morphology: A fourier approach},
+  author={Odewahn, SC and Cohen, SH and Windhorst, RA and Philip, Ninan Sajeeth},
+  journal={The Astrophysical Journal},
+  volume={568},
+  number={2},
+  pages={539},
+  year={2002},
+  publisher={IOP Publishing}
+}
+
+
+% Geometric Structure of galaxies and direct pixel images of galaxies into ANN
+@article{ann_geometric_ann_image,
+  title={Morphological classification of galaxies using computer vision and artificial neural networks: A computational scheme},
+  author={Goderya, Shaukat N and Lolling, Shawn M},
+  journal={Astrophysics and space science},
+  volume={279},
+  number={4},
+  pages={377--387},
+  year={2002},
+  publisher={Springer}
+}
+
+
+% DEC Algorithm
+@inproceedings{dec,
+  title={Unsupervised deep embedding for clustering analysis},
+  author={Xie, Junyuan and Girshick, Ross and Farhadi, Ali},
+  booktitle={International conference on machine learning},
+  pages={478--487},
+  year={2016}
+}
+
+
+% Galaxy Clustering and Classification using CNN
+@article{khan,
+  title={Unsupervised learning and data clustering for the construction of Galaxy Catalogs in the Dark Energy Survey},
+  author={Khan, Asad and Huerta, EA and Wang, Sibo and Gruendl, Robert},
+  journal={arXiv preprint arXiv:1812.02183},
+  year={2018}
+}
+
+
+%imagenet
+@article{imagenet,
+  title={Imagenet large scale visual recognition challenge},
+  author={Russakovsky, Olga and Deng, Jia and Su, Hao and Krause, Jonathan and Satheesh, Sanjeev and Ma, Sean and Huang, Zhiheng and Karpathy, Andrej and Khosla, Aditya and Bernstein, Michael and others},
+  journal={International journal of computer vision},
+  volume={115},
+  number={3},
+  pages={211--252},
+  year={2015},
+  publisher={Springer}
+}
+
+% First CNN paper
+@inproceedings{cnn,
+  title={Imagenet classification with deep convolutional neural networks},
+  author={Krizhevsky, Alex and Sutskever, Ilya and Hinton, Geoffrey E},
+  booktitle={Advances in neural information processing systems},
+  pages={1097--1105},
+  year={2012}
+}
+
+% K-L Divergence
+@article{kl_divergence,
+  title={On information and sufficiency},
+  author={Kullback, Solomon and Leibler, Richard A},
+  journal={The annals of mathematical statistics},
+  volume={22},
+  number={1},
+  pages={79--86},
+  year={1951},
+  publisher={JSTOR}
+}
+
+%MNIST Dataset
+@article{mnist,
+  title={Gradient-based learning applied to document recognition},
+  author={LeCun, Yann and Bottou, L{\'e}on and Bengio, Yoshua and Haffner, Patrick and others},
+  journal={Proceedings of the IEEE},
+  volume={86},
+  number={11},
+  pages={2278--2324},
+  year={1998},
+  publisher={Taipei, Taiwan}
+}
+
+% Reuters dataset
+@article{reuters,
+  title={Rcv1: A new benchmark collection for text categorization research},
+  author={Lewis, David D and Yang, Yiming and Rose, Tony G and Li, Fan},
+  journal={Journal of machine learning research},
+  volume={5},
+  number={Apr},
+  pages={361--397},
+  year={2004}
+}
+
+
+%Dropout
+@article{dropout,
+  title={Dropout: a simple way to prevent neural networks from overfitting},
+  author={Srivastava, Nitish and Hinton, Geoffrey and Krizhevsky, Alex and Sutskever, Ilya and Salakhutdinov, Ruslan},
+  journal={The Journal of Machine Learning Research},
+  volume={15},
+  number={1},
+  pages={1929--1958},
+  year={2014},
+  publisher={JMLR. org}
+}
+
+
+% Transfer Learning
+@inproceedings{transfer_learning,
+  title={How transferable are features in deep neural networks?},
+  author={Yosinski, Jason and Clune, Jeff and Bengio, Yoshua and Lipson, Hod},
+  booktitle={Advances in neural information processing systems},
+  pages={3320--3328},
+  year={2014}
+}
+
+
+% Xception Network
+@inproceedings{xception,
+  title={Xception: Deep learning with depthwise separable convolutions},
+  author={Chollet, Fran{\c{c}}ois},
+  booktitle={Proceedings of the IEEE conference on computer vision and pattern recognition},
+  pages={1251--1258},
+  year={2017}
+}
+
+% t-SNE Visualization
+@article{tsne,
+  title={Visualizing data using t-SNE},
+  author={Maaten, Laurens van der and Hinton, Geoffrey},
+  journal={Journal of machine learning research},
+  volume={9},
+  number={Nov},
+  pages={2579--2605},
+  year={2008}
 }

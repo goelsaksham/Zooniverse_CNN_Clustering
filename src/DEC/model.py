@@ -346,7 +346,7 @@ class DEC_Supervised(object):
 
         # begin learning
         t0 = time()
-        self.supervised_model.fit(x, y, batch_size=batch_size, epochs=epochs, callbacks=cb)
+        self.supervised_model.fit(x, y, batch_size=batch_size, epochs=epochs, callbacks=cb, validation_split=0.1)
         print('Supervised Learning time: %ds' % round(time() - t0))
         # self.supervised_model.save_weights(save_dir + '/sl_weights.h5')
         print('Supervised Learning weights are saved to %s/sl_weights.h5' % save_dir)
