@@ -42,27 +42,27 @@ def autoencoder(dims, act='relu', init='glorot_uniform', drop=False):
     # internal layers in encoder
     for i in range(n_stacks-1):
         if drop:
-            h = Dropout(0.25)(h)
+            h = Dropout(0.1)(h)
         h = Dense(dims[i + 1], activation=act, kernel_initializer=init, name='encoder_%d' % i)(h)
         # TODO: Add a Dropout layer
 
 
     # hidden layer
     if drop:
-        h = Dropout(0.25)(h)
+        h = Dropout(0.1)(h)
     h = Dense(dims[-1], kernel_initializer=init, name='encoder_%d' % (n_stacks - 1))(h)  # hidden layer, features are extracted from here
 
     y = h
     # internal layers in decoder
     for i in range(n_stacks-1, 0, -1):
         y = Dense(dims[i], activation=act, kernel_initializer=init, name='decoder_%d' % i)(y)
-        if drop:
-            y = Dropout(0.25)(y)
+        # if drop:
+        #     y = Dropout(0.25)(y)
 
     # output
     y = Dense(dims[0], kernel_initializer=init, name='decoder_0')(y)
-    if drop:
-        y = Dropout(0.25)(y)
+    # if drop:
+    #     y = Dropout(0.25)(y)
 
     return Model(inputs=x, outputs=y, name='AE'), Model(inputs=x, outputs=h, name='encoder')
 
@@ -280,7 +280,7 @@ class DEC_Supervised(object):
                  dims,
                  n_clusters=10,
                  alpha=1.0,
-                 init='glorot_uniform', drop=False):
+                 init='glorot_uniform', drop=True):
 
         super(DEC_Supervised, self).__init__()
 

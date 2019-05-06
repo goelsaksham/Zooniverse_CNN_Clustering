@@ -381,7 +381,12 @@ For this project we consider 2 different categories of data preprocessing.
 Considering that our input data is galaxy images of size 424 by 424 pixels, we use different image preprocessing techniques to reduce the dimensions of the image to avoid curse of high dimensionality. We reduce the size of image by either resizing the images to a lower dimension, or cropping to a smaller part of the image.
 
 \subsubsection{Feature Preprocessing}
-As our inputs are galaxy images, the features to the networks are the RGB values of each pixel from the image. The RGB values are integers falling in the range from 0 to 255. 
+As our inputs are galaxy images, the features to the networks are the RGB values of each pixel from the image. The RGB values are integers falling in the range from 0 to 255. However it is always preferred to preprocess the values for the features into smaller values or values corresponding to some distribution ((INSERT REFERENCE)). To accomplish this we consider two techniqes as follows:
+
+\begin{itemize}
+\item{Normalization to a [0, 1] range}
+\item{Global Standardization of the features}
+\end{itemize}
 
 
 
